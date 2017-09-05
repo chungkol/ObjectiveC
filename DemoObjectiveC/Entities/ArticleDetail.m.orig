@@ -1,0 +1,94 @@
+//
+//  ArticleDetail.m
+//  Favor
+//
+//  Created by DUCDM on 6/10/15.
+//  Copyright (c) 2015 pape. All rights reserved.
+//
+
+#import "ArticleDetail.h"
+#import "ArticleComment.h"
+@implementation ArticleDetail
+
++(instancetype)articleDetail{
+    return [[self alloc] init];
+}
+
+
+-(void)parseData:(NSDictionary *) data{
+    [self parseThisArticleData:[data objectForKey:@"this_article"]];
+    
+    
+<<<<<<< HEAD
+    _nextPrevArticles = [[NSArray alloc] initWithObjects:prevArticle, nexArticle, nil];
+    
+    [self parseComments:[data objectForKey:@"comments"]];
+=======
+    if ([data objectForKey:@"last_article"]) {
+        _prevArticle = [[ArticleE alloc] init];
+        [_prevArticle parseData:[data objectForKey:@"last_article"]];
+    }
+    
+    if ([data objectForKey:@"next_article"]) {
+        _nextArticle = [[ArticleE alloc] init];
+        [_nextArticle parseData:[data objectForKey:@"next_article"]];
+    }
+    
+    _relatedArticles = [[NSMutableArray alloc] init];
+    _tags = [[NSMutableArray alloc] init];
+    
+    for(NSDictionary *tagBlock in [data objectForKey:@"related_articles"]){
+        ETTag *tag = [ETTag tag];
+        [tag parseData:[tagBlock objectForKey:@"tag"]];
+        [_tags addObject:tag];
+        
+        for(NSDictionary *articleInfos in [tagBlock objectForKey:@"articles"]){
+            ArticleE *article = [ArticleE article];
+            [article parseData:articleInfos];
+            [_relatedArticles addObject:article];
+        }
+    }
+    
+    NSMutableArray *comments = [[NSMutableArray alloc] init];
+//    for (int i = 0; i < 3; i++) {
+//        NSDictionary *dic = @{@"name" : [NSString stringWithFormat:@"name%d",i], @"comment" :[NSString stringWithFormat:@"comment%d",i],@"icon":@"",@"image":@""};
+//        ArticleComment *comment = [ArticleComment articleComment];
+//        [comment parseData:dic];
+//        [comments addObject:comment];
+//    }
+    _articleComments = comments;
+>>>>>>> 6b3418a122166adeb174febb19a9eed3feb7f86c
+}
+
+- (void)parseThisArticleData:(NSDictionary *)data
+{
+    self.articleId = (int)[[data objectForKey:@"id"] integerValue];
+    self.title = [data objectForKey:@"title"];
+    self.lead = [data objectForKey:@"lead"];
+    self.imageURL = [data objectForKey:@"image"];
+    self.body = [data objectForKey:@"body"];
+    self.shortenURL = [data objectForKey:@"shorten_url"];
+    self.publishedAt = [data objectForKey:@"published_at"];
+    self.author = [Author author];
+    for (NSDictionary *value in [data objectForKey:@"authors"]) {
+        [self.author parseData:value];
+    }
+    self.likeNumer = (int)[[data objectForKey:@"favorite"] integerValue];
+    self.commentNumer = (int)[[data objectForKey:@"comment"] integerValue];
+    self.isLike = [[data objectForKey:@"current_user_favorited"] boolValue];
+}
+
+- (void)parseComments:(NSArray *)comments{
+    NSMutableArray *all = [NSMutableArray array];
+    for (NSDictionary *data in comments) {
+        ArticleComment *comment = [[ArticleComment alloc] init];
+        [comment parseData:data];
+        [all addObject:comment];
+    }
+    _articleComments = [NSArray arrayWithArray:all];
+}
+
+-(NSString *)description{
+    return [NSString stringWithFormat:@"articleId: %d\ntitle: %@\nlead: %@\nimageURL: %@\nbody: %@\nauthor: %@",self.articleId, self.title,self.lead,self.imageURL,self.body,self.author.description];
+}
+@end

@@ -1,0 +1,71 @@
+//
+//  ArticleComment.m
+//  Favor
+//
+//  Created by DUCDM on 6/11/15.
+//  Copyright (c) 2015 pape. All rights reserved.
+//
+
+#import "ArticleComment.h"
+
+@implementation ArticleComment
+
++(instancetype)articleComment{
+    return [[self alloc] init];
+}
+
+-(void)parseData:(NSDictionary *)data{
+<<<<<<< HEAD
+    self.commentId = [Util intValueForKey:@"id" fromDict:data];
+    self.name = [Util stringValueForKey:@"user_name" fromDict:data];
+    self.comment = [Util stringValueForKey:@"body" fromDict:data];
+    self.icon = [Util stringValueForKey:@"icon" fromDict:data];
+    self.commentImage = [Util stringValueForKey:@"image" fromDict:data];
+    self.numberLiked = [Util intValueForKey:@"favorite" fromDict:data];
+    self.isLiked = [Util intValueForKey:@"current_user_favorited" fromDict:data] == 1;
+=======
+    if ([data objectForKey:@"id"] != [NSNull null]) {
+        self.commentId = (int)[[data objectForKey:@"id"] integerValue];
+    }else{
+        self.commentId = 0;
+    }
+    if ([data objectForKey:@"user_name"] != [NSNull null]) {
+        self.name = [data objectForKey:@"user_name"];
+    }else{
+        self.name = @"";
+    }
+    
+    if ([data objectForKey:@"body"] != [NSNull null]) {
+        self.comment = [data objectForKey:@"body"];
+    }else{
+        self.comment = @"";
+    }
+        
+    if ([data objectForKey:@"icon"] != [NSNull null]) {
+        self.icon = [data objectForKey:@"icon"];
+    }else{
+        self.icon = @"";
+    }
+    if ([data objectForKey:@"image"] != [NSNull null]) {
+        self.commentImage = [data objectForKey:@"image"];
+        if (self.commentImage.length  >0) {
+            self.imageCommentSize = CGSizeMake([[data  objectForKey:@"width"] floatValue], [[data objectForKey:@"height"] floatValue]);
+        }
+        
+    }else{
+        self.commentImage = @"";
+    }
+    if ([data objectForKey:@"favorite"] != [NSNull null]){
+        self.numberLiked = (int)[[data objectForKey:@"favorite"] integerValue];
+    }
+    if ([data objectForKey:@"current_user_favorited"] != [NSNull null]){
+        self.isLiked = [[data objectForKey:@"current_user_favorited"] boolValue];
+    }
+    
+>>>>>>> c4b4c5585af943e09a4bdd723aa52df98a7bc083
+}
+
+-(NSString *)description{
+    return [NSString stringWithFormat:@"name: %@\ncomment: %@\nicon: %@\ncommentImage %@", self.name, self.comment, self.icon, self.commentImage];
+}
+@end

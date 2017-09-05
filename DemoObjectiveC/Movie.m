@@ -7,14 +7,16 @@
 //
 
 #import "Movie.h"
-
 @implementation Movie
+
 - (instancetype)initWithAttributes:(NSDictionary *)attributes {
     ;
     if (self == [super init]) {
-    self.title = [attributes valueForKeyPath:@"title"];
-    self.overview = [attributes valueForKeyPath:@"overview"];
-    self.poster_path = [attributes valueForKeyPath:@"poster_path"];
+        self.movieID = [Util intValueForKey:@"id" fromDict:attributes];
+        self.title = [Util stringValueForKey:@"title" fromDict:attributes];
+        self.overview = [Util stringValueForKey:@"overview" fromDict:attributes];
+        self.poster_path = [Util stringValueForKey:@"poster_path" fromDict:attributes];
+        _title = @"a";
     }
     return self;
 }

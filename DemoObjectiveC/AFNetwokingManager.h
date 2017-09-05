@@ -10,4 +10,5 @@
 
 @interface AFNetwokingManager : NSObject
 - (void) request: (NSString *) url param:(NSDictionary *) param header:(NSDictionary *)header completion:(void (^)(NSDictionary *result , NSError *error))completion;
+- (void) postRequest: (NSString *) url param:(NSDictionary *) param header:(NSDictionary *)header completion:(void (^)(NSDictionary *result , NSError *error))completion;
 @end

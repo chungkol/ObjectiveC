@@ -1,0 +1,137 @@
+//
+//  Requester.m
+//  Favor
+//
+//  Created by vudinhthuy on 6/9/15.
+//  Copyright (c) 2015 pape. All rights reserved.
+//
+
+#import "HttpRequester.h"
+
+
+#define API_USERNAME @"papelook"
+#define API_PASSWORD @"pape0321ozawa"
+
+#define BASE_URL (SERVER_TYPE == MAIN_SERVER ? @"http://api.favor.life" : @"http://192.168.11.92:3000")
+
+
+@implementation HttpRequester
+
+static HttpRequester *_requester;
+
++(instancetype) requester{
+    if (!_requester) {
+        _requester = [[HttpRequester alloc] init];
+    }
+    
+    return _requester;
+}
+
+
+-(id) init{
+    if (self = [super init]) {
+        _requestManager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:BASE_URL]];
+        _requestManager.credential = [NSURLCredential credentialWithUser:API_USERNAME password:API_PASSWORD persistence:NSURLCredentialPersistenceForSession];
+    }
+    
+    return self;
+}
+
+-(void) requestNewListArticlesByPage:(int) page responseHandler:(HttpRequesterHandler) handler{
+    [_requestManager GET:[NSString stringWithFormat:@"articles/new/%i.json", page] parameters:[self prepareParams:nil] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        handler(YES, responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"AF Error: %@", error);
+        handler(NO, nil);
+    }];
+}
+
+-(void) requestHotListArticlesByPage:(int) page responseHandler:(HttpRequesterHandler) handler{
+    [_requestManager GET:[NSString stringWithFormat:@"articles/hot/%i.json", page] parameters:[self prepareParams:nil] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        handler(YES, responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"AF Error: %@", error);
+        handler(NO, nil);
+    }];
+}
+
+
+<<<<<<< HEAD
+-(void) requestArticleDetailWithArticleID: (int)articleID andResult:(HttpRequesterHandler) handler{
+    [_requestManager GET:[NSString stringWithFormat:@"articles/%d.json", articleID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+=======
+-(void) requestArticleDetailWithArticleID: (int) articleId andResult:(HttpRequesterHandler) handler{
+    [_requestManager GET:[NSString stringWithFormat:@"articles/%i.json", articleId] parameters:[self prepareParams:nil] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+>>>>>>> aadb90bd925fd832d476acbfce5b751e3dfe2f83
+        handler(YES, responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"AF Error: %@", error);
+        handler(NO, nil);
+    }];
+}
+
+
+-(void) requestCreateUser:(HttpRequesterHandler) handler{
+    [_requestManager POST:@"/users" parameters:@{@"app_version": APP_VERSION, @"client_type": CLIENT_TYPE} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        handler(YES, responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@", error);
+        handler(NO, nil);
+    }];
+}
+
+-(void) requestUpdateUserInfos:(NSDictionary *) infos responseHandler:(HttpRequesterHandler) handler{
+    [_requestManager POST:@"/users" parameters:[self prepareParams:infos] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        handler(YES, responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@", error);
+        handler(NO, nil);
+    }];
+}
+
+-(void) requestGetUserInfos:(NSInteger) userID responseHandler:(HttpRequesterHandler) handler{
+    [_requestManager GET:[NSString stringWithFormat:@"/users/%li", (long)userID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        handler(YES, responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@", error);
+        handler(NO, nil);
+    }];
+}
+
+
+-(void) requestAddNewComment:(NSDictionary *) commentInfos article:(NSInteger) articleId responseHandler:(HttpRequesterHandler) handler{
+    [_requestManager POST:[NSString stringWithFormat:@"/articles/%li/add_comment", (long)articleId]
+               parameters:[self prepareParams:commentInfos]
+                  success:^(AFHTTPRequestOperation *operation, id responseObject) {
+         handler(YES, responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error){
+        NSLog(@"%@", error);
+        handler(NO, nil);
+    }];
+}
+
+-(void) requestLikeArticle:(NSInteger) articleId responseHandler:(HttpRequesterHandler) handler{
+    [_requestManager POST:[NSString stringWithFormat:@"/articles/%li/add_favorite", (long)articleId]
+               parameters:[self prepareParams:nil]
+                  success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        handler(YES, responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error){
+         NSLog(@"%@", error);
+         handler(NO, nil);
+     }];
+}
+
+-(NSDictionary *) prepareParams:(NSDictionary *) input{
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    if (input) {
+        [params addEntriesFromDictionary:input];
+    }
+    
+    [params setObject:APP_VERSION forKey:@"app_version"];
+    [params setObject:CLIENT_TYPE forKey:@"client_type"];
+    [params setObject:favorUser.token forKey:@"token"];
+    [params setObject:[NSNumber numberWithInteger:favorUser.userId] forKey:@"user_id"];
+    
+    return params;
+}
+@end

@@ -8,12 +8,8 @@
 //
 
 #import "ViewControllerTopRate.h"
-#import "TableViewCellMovie.h"
-#import "AFNetwokingManager.h"
-#import "Constant.h"
-#import "Movie.h"
 @interface ViewControllerTopRate () <UITableViewDelegate, UITableViewDataSource>
-
+//@property Manager
 @end
 
 @implementation ViewControllerTopRate
@@ -21,30 +17,43 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 }
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self getData];
 
+}
+
+- (void) showDialog:(NSString *) title message: (NSString *) message {
+
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle: title message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:ok];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+}
 - (void)getData {
-    AFNetwokingManager *manager = [[AFNetwokingManager alloc] init];
-    NSDictionary *param = @{@"api_key": APIkey};
-    [manager request:getMovie param:param header:nil completion:^(NSDictionary *result, NSError *error) {
+    ManagerData *manager = [[ManagerData alloc] init];
+    [manager getListTopRate:^(NSMutableArray *result, NSError *error) {
         if (!error) {
-            NSArray *dataDic = [result objectForKey:@"results"];
-            if (dataDic != (NSArray *)[NSNull null])
-            {
-                for (NSDictionary* item in dataDic) {
-                    Movie *movie = [[Movie alloc] initWithAttributes:item];
-                    [self.data addObject:movie];
-                }
-                [self.myTable reloadData];
-            }
+            self.data = result;
+            [self.myTable reloadData];
         }else {
             NSLog(@"error %@" , error);
+            [self showDialog:@"error" message:error.description];
         }
+        
     }];
 }
 
-//MARK: UITableviewDelegate
+#pragma mark UITableviewDelegate
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
+}
+-(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
 
-//MARK: UITableviewDataSource
+}
+#pragma mark UITableviewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.data count];
 }
@@ -52,10 +61,16 @@
     TableViewCellMovie *cell = [tableView dequeueReusableCellWithIdentifier:@"cellMovie" forIndexPath:indexPath];
     Movie *movie = [self.data objectAtIndex:indexPath.row];
     if (movie != (Movie *)[NSNull null]) {
-        cell.description = movie.description;
-        cell.titleCell = movie.title;
-        
+        cell.des.text  = movie.overview;
+        cell.titleCell.text = movie.title;
+        if (movie.poster_path != (id) ([NSNull null])) {
+            [cell.imageCell sd_setImageWithURL:[NSURL URLWithString: [baseURLImage stringByAppendingString:movie.poster_path]]
+                              placeholderImage:[UIImage imageNamed:@"google.png"]];
 
+        }else {
+            cell.imageCell.image = [UIImage imageNamed:@"google.png"];
+        }
+        
     }
         return cell;
 }

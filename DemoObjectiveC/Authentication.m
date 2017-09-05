@@ -11,7 +11,8 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <GoogleSignIn/GoogleSignIn.h>
 #import "AFNetwokingManager.h"
-@interface Authentication ()<GIDSignInUIDelegate, GIDSignInDelegate>
+#import "PopupViewController.h"
+@interface Authentication ()<GIDSignInUIDelegate, GIDSignInDelegate, AVPopupViewControllerDelegate>
 
 @end
 
@@ -32,11 +33,20 @@
         case 102:
             [[GIDSignIn sharedInstance] signIn];
         case 104:
-            [self testAPI];
+            [self showPopup];
+            break;
         default:
             break;
     }
     
+}
+- (void) showPopup {
+    PopupViewController *a =  [[PopupViewController alloc] initWithNib];
+    a.delegate = self;
+    [a show];
+}
+-(void)popupViewDidCallBack:(id)sender {
+    NSLog(@"call back");
 }
 - (void) testAPI {
     AFNetwokingManager *manager = [[AFNetwokingManager alloc] init];

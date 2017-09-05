@@ -7,9 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <GoogleSignIn/GoogleSignIn.h>
-#import <GGLCore/GGLContext.h>
+
 @interface AppDelegate ()<GIDSignInDelegate>
 
 @end
@@ -19,6 +17,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     //setup login fb
+//    [Alamofire ur]
     [[FBSDKApplicationDelegate sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
     //setup login google
     NSError* configureError;

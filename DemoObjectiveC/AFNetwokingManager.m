@@ -13,10 +13,16 @@
 -(void)request:(NSString *)url param:(NSDictionary *)param header:(NSDictionary *)header completion:(void (^)(NSDictionary *, NSError *))completion {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     [manager GET:url parameters:param progress:nil success:^(NSURLSessionTask *task, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
         if( completion ) completion(responseObject, nil);
     } failure:^(NSURLSessionTask *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
+        if( completion ) completion(nil, error);
+    }];
+}
+- (void)postRequest:(NSString *)url param:(NSDictionary *)param header:(NSDictionary *)header completion:(void (^)(NSDictionary *, NSError *))completion {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [manager POST:url parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if( completion ) completion(responseObject, nil);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if( completion ) completion(nil, error);
     }];
 }

@@ -1,0 +1,57 @@
+//
+//  Requester.h
+//  Favor
+//
+//  Created by vudinhthuy on 6/9/15.
+//  Copyright (c) 2015 pape. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import "AFNetworking.h"
+
+typedef void (^HttpRequesterHandler)(BOOL success, id responseObject);
+
+@interface HttpRequester : NSObject
+
+@property (nonatomic, strong) AFHTTPRequestOperationManager *requestManager;
++(instancetype) requester;
+
+-(void) requestNewListArticlesByPage:(int) page responseHandler:(HttpRequesterHandler) handler;
+-(void) requestHotListArticlesByPage:(int) page responseHandler:(HttpRequesterHandler) handler;
+
+-(void) requestArticleDetailWithArticleID: (int) articleId andResult:(HttpRequesterHandler) handler;
+-(void) requestCreateUser:(HttpRequesterHandler) handler;
+-(void) requestUpdateUserInfos:(NSDictionary *) infos responseHandler:(HttpRequesterHandler) handler;
+-(void) requestGetUserInfos:(NSInteger) userID responseHandler:(HttpRequesterHandler) handler;
+-(void) requestAddNewComment:(NSDictionary *) commentInfos article:(NSInteger) articleId responseHandler:(HttpRequesterHandler) handler;
+-(void) requestLikeArticle:(NSInteger) articleId responseHandler:(HttpRequesterHandler) handler;
+-(void) requestAllCommentOfArticle: (int)articleId responseHadle:(HttpRequesterHandler) handler;
+-(void) requestAllBrands:(HttpRequesterHandler) handler;
+-(void) requestAllCatefory:(HttpRequesterHandler) handler;
+-(void) requestCategoryWithBrand: (int)brandId responseHadle:(HttpRequesterHandler) handler;
+-(void) requestListLikedArticle:(int) page responseHadle:(HttpRequesterHandler) handler;
+-(void) requestSearchInfo:(HttpRequesterHandler) handler;
+-(void) requestArticleByTag: (int) tagId atPage:(int)page andHanler:(HttpRequesterHandler) handler;
+-(void) requestArticleByBrandId: (int)brandId andCategoryId: (int)categoryId atPage:(int)page andHanler:(HttpRequesterHandler) handler;
+-(void) requestCheckCss:(NSString *) filename andHanler:(HttpRequesterHandler) handler;
+-(void) requestUpdateDeviceToken;
+-(void) requestCheckUpdateNewListWithLastId: (int) articleId andResult:(HttpRequesterHandler) handler;
+-(void) likeCommentWithId:(int)commentId andResult:(HttpRequesterHandler) handler;
+-(void) requestWriterInfo: (int) writerId atPage:(int)page andHanler:(HttpRequesterHandler) handler;
+-(void) requestAllCommentOfArticleByNotification: (int)articleId notiId:(int) notiId responseHadle:(HttpRequesterHandler) handler;
+-(void) requestNotificationList:(int) page responseHandler:(HttpRequesterHandler) handler;
+-(void) requestNotificationCountWithResponseHandler:(HttpRequesterHandler) handler;
+-(void) requestReplyComment:(int)commentId with:(NSDictionary *)replyInfor responseHandler:(HttpRequesterHandler) handler;
+<<<<<<< HEAD
+-(void) requestNewListUserArticlesByPage:(int) page responseHandler:(HttpRequesterHandler) handler;
+-(void) requestHotListUserArticlesByPage:(int) page responseHandler:(HttpRequesterHandler) handler;
+
+=======
+
+
+/**
+ *  Update  for 1.1.0
+ */
+- (void) requestUserPostArticle:(NSDictionary *)info responseHandler:(HttpRequesterHandler) handler;
+>>>>>>> bf80bbd7bd75da04a063610fedb9519a82cc437e
+@end

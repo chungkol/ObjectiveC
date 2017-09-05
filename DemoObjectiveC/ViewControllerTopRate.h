@@ -7,9 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TableViewCellMovie.h"
+#import "ManagerData.h"
+#import "Constant.h"
+#import "Movie.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface ViewControllerTopRate : UIViewController
 @property (weak, nonatomic) IBOutlet UITableView *myTable;
-@property NSMutableArray *data;
-
+@property (nonatomic, strong) NSMutableArray *data;
 @end

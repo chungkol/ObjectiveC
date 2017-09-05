@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface Movie : NSObject
-@property NSString *title;
-@property NSString *overview;
-@property NSString *poster_path;
-
+@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) NSString *overview;
+@property (nonatomic, strong) NSString *poster_path;
+@property (nonatomic, assign) int *movieID;
 - (instancetype)initWithAttributes:(NSDictionary *)attributes;
 
 @end

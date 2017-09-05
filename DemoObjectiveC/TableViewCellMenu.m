@@ -9,8 +9,7 @@
 #import "TableViewCellMenu.h"
 
 @implementation TableViewCellMenu
-@synthesize iconMenu;
-@synthesize titleMenu;
+
 - (void)awakeFromNib {
     [super awakeFromNib];
 }
